@@ -1,0 +1,12 @@
+import sys
+
+N = int(sys.stdin.readline())
+dp = [0, 1, 2]
+
+# n번째 타일을 넣을땐 
+# n-2번째까지 타일을 채운 상태에서 2x1 타일 2개를 추가하여 만드는 방법
+# n-1번째까지 타일을 채운 상태에서 1x2 타일 1개를 추가하여 만드는 
+for i in range(3, N+1):
+    dp.append((dp[i-1] + dp[i-2]) % 10007)
+
+print(dp[N])

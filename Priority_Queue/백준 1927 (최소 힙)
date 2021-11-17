@@ -1,0 +1,68 @@
+# heapq를 사용해서 풀이가능
+import sys
+
+
+def push(heap, x, heapSize):
+    pos = heapSize
+    if heapSize == len(heap):
+        heap.append(x)
+    else:
+        heap[heapSize] = x
+
+    # 맨 위까지 가거나 부모가 더 작을 때까지 비교
+    while pos > 1:
+        # 부모노드(tmp)는 자식노드(pos)의 반
+        tmp = int(pos/2)
+        if x < heap[tmp]:
+            heap[pos] = heap[tmp]
+            heap[tmp] = x
+            pos = tmp
+        else:
+            break
+
+
+def pop(heap, heapSize):
+    heap[1] = heap[heapSize]
+    heap[heapSize] = -1
+    heapSize -= 1
+    pos = 1
+    # 자식노드가 2개일 때
+    while 2 * pos + 1 <= heapSize:
+        # 자식노드들보다 작을 때 또는 두 자식노드가 같을 때
+        if (heap[pos] < heap[2 * pos] and heap[pos] < heap[2 * pos + 1]):
+            break
+        # 하나의 자식노드가 부모노드보다 작을 때
+        elif heap[2 * pos + 1] < heap[2 * pos]:
+            posChange = 2 * pos + 1
+        #elif heap[2 * pos] <= heap[2 * pos + 1]:
+        else:
+            posChange = 2 * pos
+
+        tmp = heap[pos]
+        heap[pos] = heap[posChange]
+        heap[posChange] = tmp
+        pos = posChange
+
+    # 자식노드가 1개일 때
+    if 2 * pos <= heapSize and heap[pos] > heap[2 * pos]:
+        tmp = heap[pos]
+        heap[pos] = heap[2 * pos]
+        heap[2 * pos] = tmp
+
+    return heapSize
+
+
+N = int(sys.stdin.readline().rstrip())
+minHeap = [-1]
+heapSize = 0
+for i in range(N):
+    x = int(sys.stdin.readline().rstrip())
+    if x == 0:
+        if heapSize == 0:
+            print(0)
+        else:
+            print(minHeap[1])
+            heapSize = pop(minHeap, heapSize)
+    else:
+        heapSize += 1
+        push(minHeap, x, heapSize)

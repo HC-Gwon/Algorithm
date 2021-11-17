@@ -1,0 +1,105 @@
+# Kruskal algorithm
+# 간선의 개수가 많아 상대적으로 느리다
+import sys
+
+
+def find_parent(arr, x):
+    while arr[x] != x:
+        x = arr[x]
+
+    return x
+
+
+N = int(sys.stdin.readline())
+M = int(sys.stdin.readline())
+graph = []
+for i in range(M):
+    A, B, C = map(int, sys.stdin.readline().split())
+    if A < B:
+        graph.append((C, A, B))     # 가중치, 연결된 정점 1과 2
+    else:
+        graph.append((C, B, A))     # 번호가 빠른 정점이 root가 될 수 있게 설정
+
+graph.sort(key=lambda x: x[0], reverse=True)            # Kruskal algorithm 적용을 위한 정렬
+root = [i for i in range(N+1)]      # 각 정점의 root
+count = 0
+answer = 0
+while True:
+    if count == N-1:                # V-1개의 간선 생성시 종료
+        break
+
+    length = len(graph)
+    weight, x1, x2 = graph[length-1]    # 가중치, 연결된 정점 1과 2
+    # cycle 생성 방지
+    p1 = find_parent(root, x1)
+    p2 = find_parent(root, x2)
+    if p1 != p2:
+        count += 1
+        answer += weight
+        if p1 < p2:
+            root[p2] = p1
+        else:
+            root[p1] = p2
+
+    graph.pop()
+
+print(answer)
+
+
+
+# Prim algorithm
+import sys
+import heapq
+
+
+def find_parent(arr, x):
+    while arr[x] != x:
+        x = arr[x]
+
+    return x
+
+
+N = int(sys.stdin.readline())
+M = int(sys.stdin.readline())
+graph = [[] for i in range(N+1)]
+for i in range(M):
+    A, B, C = map(int, sys.stdin.readline().split())
+    graph[A].append((C, B))         # 가중치, 연결된 정점
+    graph[B].append((C, A))
+
+root = [i for i in range(N+1)]      # 각 정점의 root
+heap = [(0, 1, 1)]                  # 가중치의 합, 정점 v1, v2
+heapq.heapify(heap)
+count = 0
+answer = 0
+while True:
+    if count == N:                  # V-1개의 간선 생성시 종료
+        break
+
+    nowWeight, v1, v2 = heapq.heappop(heap)
+    if count != 0:
+        # cycle 생성 방지
+        p1 = find_parent(root, v1)
+        p2 = find_parent(root, v2)
+
+        if p1 == p2:
+            continue
+        else:
+            count += 1
+            answer += nowWeight
+            if p1 < p2:
+                root[p2] = p1
+            else:
+                root[p1] = p2
+    else:
+        count += 1
+
+    # 현재 정점과 연결된 정점을 heap에 저장
+    length = len(graph[v2])
+    for i in range(length):
+        weight = graph[v2][len(graph[v2])-1][0]
+        connV = graph[v2][len(graph[v2])-1][1]
+        heapq.heappush(heap, (weight, v2, connV))
+        graph[v2].pop()
+
+print(answer)

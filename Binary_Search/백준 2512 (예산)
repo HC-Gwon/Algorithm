@@ -1,0 +1,29 @@
+import sys
+from collections import Counter
+
+N = int(sys.stdin.readline())
+budget = list(map(int, sys.stdin.readline().split()))
+maxBudg = int(sys.stdin.readline())
+
+budget.sort()
+
+left = 1
+right = budget[len(budget)-1]
+answer = 0
+while left <= right:
+    mid = (left + right) // 2
+
+    tmp = 0
+    for i in range(N):
+        if budget[i] > mid:
+            tmp += mid
+        else:
+            tmp += budget[i]
+
+    if tmp <= maxBudg:
+        left = mid + 1
+        answer = mid
+    elif tmp > maxBudg:
+        right = mid - 1
+
+print(answer)

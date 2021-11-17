@@ -1,0 +1,62 @@
+# 계단 오르기의 경우 반드시 올라야하지만 해당 문제는 몇개를 건너뛰든 상관 없다.
+# 풀이 1 (pypy3 사용)
+import sys
+
+N = int(sys.stdin.readline())
+grape = []
+for i in range(N):
+    x = int(sys.stdin.readline())
+    grape.append(x)
+
+dp1 = [grape[0]]        # 전 잔의 포도주를 마심
+dp2 = [0]               # 전 잔의 포도주를 마시지 않음
+
+answer = dp1[0]
+for i in range(1, N):
+    maxNbr = 0
+    
+    # 몇개를 건너뛰어도 상관없기 때문에 전 잔의 포도주를 마시기 때문에
+    # 세개 전의 잔까지 중 최대와 합친다.
+    for j in range(i-2):
+        if maxNbr < max(dp1[j], dp2[j]):
+            maxNbr = max(dp1[j], dp2[j])
+    dp1.append(grape[i] + grape[i-1] + maxNbr)
+
+    # 전 잔의 포도주를 마시지 않기 때문에
+    # 두개 전의 잔까지 중 최대와 합친다.
+    for j in range(i-1):
+        if maxNbr < max(dp1[j], dp2[j]):
+            maxNbr = max(dp1[j], dp2[j])
+
+    dp2.append(grape[i] + maxNbr)
+
+    if answer < max(dp1[i], dp2[i]):
+        answer = max(dp1[i], dp2[i])
+
+print(answer)
+
+
+
+# 풀이 2
+import sys
+
+input = sys.stdin.readline
+
+n = int(input())
+
+wine = [0]
+for _ in range(n):
+    wine.append(int(input()))
+
+dp = [0] 
+dp.append(wine[1])
+if n > 1:
+    dp.append(wine[1] + wine[2])
+
+# 현재 잔을 마신다와 마시지 않는다로 나눠서
+# 마시는 경우 위와 마찬가지로 수행
+# 마시지 않는 경우 전 잔까지 마신다로 
+for i in range(3, n + 1):
+    dp.append(max(dp[i-1], dp[i-3] + wine[i-1] + wine[i], dp[i-2] + wine[i]))
+
+print(dp[n])

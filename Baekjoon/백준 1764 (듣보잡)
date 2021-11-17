@@ -1,0 +1,26 @@
+import sys
+from collections import Counter
+
+N, M = map(int, sys.stdin.readline().split())
+listen = set()
+for i in range(N):
+    x = sys.stdin.readline().rstrip('\n')
+    listen.add(x)
+
+see = set()
+for i in range(M):
+    x = sys.stdin.readline().rstrip('\n')
+    see.add(x)
+
+answerNbr = 0
+answerList = []
+for i in listen:
+    if i in see:
+        answerList.append(i)
+        answerNbr += 1
+
+answerList.sort()
+
+print(answerNbr)
+for i in answerList:
+    print(i)

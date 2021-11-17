@@ -1,0 +1,43 @@
+import sys
+
+
+def find_parent(arr, x):
+    while arr[x] != x:
+        x = arr[x]
+
+    return x
+
+
+N, M = map(int, sys.stdin.readline().split())
+graph = []
+for i in range(M):
+    A, B, C = map(int, sys.stdin.readline().split())
+    if A < B:
+        graph.append((C, A, B))     # 가중치, 연결된 정점 1과 2
+    else:
+        graph.append((C, B, A))     # 번호가 빠른 정점이 root가 될 수 있게 설정
+
+graph.sort(key=lambda x: x[0], reverse=True)            # Kruskal algorithm 적용을 위한 정렬
+root = [i for i in range(N+1)]      # 각 정점의 root
+count = 0
+answer = 0
+while True:
+    if count == N-2:                # V-1개의 간선 생성시 종료
+        break
+
+    length = len(graph)
+    weight, x1, x2 = graph[length-1]    # 가중치, 연결된 정점 1과 2
+    # cycle 생성 방지
+    p1 = find_parent(root, x1)
+    p2 = find_parent(root, x2)
+    if p1 != p2:
+        count += 1
+        answer += weight
+        if p1 < p2:
+            root[p2] = p1
+        else:
+            root[p1] = p2
+
+    graph.pop()
+
+print(answer)

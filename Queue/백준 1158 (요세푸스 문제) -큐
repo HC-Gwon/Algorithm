@@ -1,0 +1,31 @@
+# circular queue 와 관련된 문제
+import sys
+
+N, K = sys.stdin.readline().rstrip().split()    # N : 전체 인원, K : 제거
+queue = []
+front = 0                                       # 삽입이 없으므로 rear은 X
+answer = []
+
+for i in range(1, int(N)+1):
+    queue.append(i)
+
+while True:
+    # K칸만큼 이동 & 이동했을 때 값이 queue 길이보다 큰 것 방지
+    front += int(K)-1
+    front %= len(queue)
+
+    answer.append(queue[front])
+    del(queue[front])
+    
+    # 제거하고나서의 front 값이 queue 길이보다 큰 것 방지
+    # 모두 제거했을 땐 front %= ~~ 해 줄 필요 없음
+    if len(queue) == 0:
+        break
+    front %= len(queue)
+
+print("<", end="")
+for i in range(int(N)):
+    print(answer[i], end="")
+    if i < int(N)-1:
+        print(", ", end="")
+print(">")

@@ -1,0 +1,37 @@
+import heapq
+import sys
+
+# 큰 수들과 작은 수들을 분리해서 heap에 넣는다
+# 큰 수들 중 가장 작은 값과 (minHeap)
+# 작은 수들 중 가장 큰 값을 (maxHeap) 비교하여 중간값을 찾는다.
+N = int(sys.stdin.readline().rstrip())
+minHeap = []
+maxHeap = []
+for i in range(N):
+    x = int(sys.stdin.readline().rstrip())
+    # 두 heap의 크기가 같을 때 maxHeap에 값 넣기
+    if len(maxHeap) == len(minHeap):
+        heapq.heappush(maxHeap, -x)
+    # maxHeap에 하나 더 들어갔을 때 minHeap에 넣기
+    elif len(maxHeap)-1 == len(minHeap):
+        heapq.heappush(minHeap, x)
+
+    # 큰 값들 중 최솟값보다 작은 값들 중 최댓값이 더 클 때
+    # 서로 삭제하고 새로 삽입 (바꿧는데 힙 조건에 안맞을 수 있음)
+    # ex) 6 / 5 4 4 4 3 3
+    if len(minHeap) > 0 and -maxHeap[0] > minHeap[0]:
+        tmpMax = maxHeap[0]
+        tmpMin = minHeap[0]
+        heapq.heappop(maxHeap)
+        heapq.heappop(minHeap)
+        heapq.heappush(maxHeap, -tmpMin)
+        heapq.heappush(minHeap, -tmpMax)
+
+    #print(maxHeap, minHeap)
+    # maxHeap에 먼저 넣었으므로 홀수일 땐 maxHeap에서
+    if i%2 == 0:
+        print(-maxHeap[0])
+    # 짝수일 땐 둘 중 작은 값을 출력
+    else:
+        if len(minHeap) > 0:
+            print(min(-maxHeap[0], minHeap[0]))

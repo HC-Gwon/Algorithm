@@ -1,0 +1,17 @@
+import sys
+
+N = int(sys.stdin.readline())
+if N != 1:
+    tmp = N
+    while tmp != 1:
+        check = 0
+        for i in range(2, int(N**0.5)+1):         # 분해가 된다면 반드시 대응되는 수가 존재하므로
+            if tmp % i == 0:                      # 대응되는 수들 중 가운데 까지만 확인
+                print(i)
+                tmp /= i
+                check = 1
+                break
+
+        if check == 0:
+            print(int(tmp))
+            tmp = 1

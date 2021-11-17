@@ -1,0 +1,48 @@
+import sys
+
+N = int(sys.stdin.readline())
+robot = [i for i in range(1000001)]
+nbr_of_part = [1 for i in range(1000001)]
+
+
+def find_parent(node):
+    # 최상단 값일 때
+    if node == robot[node]:
+        return node
+    # 부모 노드가 있을 때
+    else:
+        return find_parent(robot[node])
+
+
+def union(a, b):
+    parent_a = find_parent(a)
+    parent_b = find_parent(b)
+
+    # root node가 같은걸 줄 수도 있음
+    if parent_a < parent_b:
+        nbr_of_part[parent_a] += nbr_of_part[parent_b]
+        robot[parent_b] = parent_a
+
+    elif parent_b < parent_a:
+        nbr_of_part[parent_b] += nbr_of_part[parent_a]
+        robot[parent_a] = parent_b
+
+
+for _ in range(N):
+    tmp = sys.stdin.readline()
+
+    # 부품 정보를 알려줄 때
+    if tmp[0] == 'I':
+        temp, a, b = tmp.split()
+        a, b = int(a), int(b)
+        union(a, b)
+
+    # 해당 로봇의 부품의 개수를 물어볼 때
+    elif tmp[0] == 'Q':
+        temp, c = tmp.split()
+        c = int(c)
+
+        while c != robot[c]:
+            c = robot[c]
+
+        print(nbr_of_part[c])

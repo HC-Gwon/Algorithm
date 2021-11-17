@@ -1,0 +1,23 @@
+import sys
+
+N = int(sys.stdin.readline())
+stair = []
+for i in range(N):
+    x = int(sys.stdin.readline())
+    stair.append(x)
+
+dp1 = [stair[0]]      # 이전 계단을 오른 것
+dp2 = [0]             # 이전 계단을 오르지 않고 그 전 계단을 밟은 것
+
+if N >= 2:
+    dp1.append(dp1[0] + stair[1])
+    dp2.append(stair[1])
+
+    # 세 번 계단을 한칸씩 오를 수 없으므로
+    # dp1의 경우, 이전 계단을 올라야 하므로 dp2[i-1]
+    # dp2의 경우, 설정한 것에 따라 이전 계단을 밟지 않으므로 
+    for i in range(2, N):
+        dp1.append(dp2[i-1] + stair[i])
+        dp2.append(max(dp1[i-2], dp2[i-2]) + stair[i])
+
+print(max(dp1[N-1], dp2[N-1]))

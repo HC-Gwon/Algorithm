@@ -1,0 +1,31 @@
+# 1과 5만 사용하면 무슨 수든 항상 그리디 방식이 가장 빠르고 최적해이다.
+
+import sys
+
+N, K = map(int, sys.stdin.readline().lstrip().split())
+coin = []                   # 코인의 종류
+coinNbr = []                # 코인의 수
+for i in range(N):
+    x = int(sys.stdin.readline().lstrip())
+    coin.append(x)
+    coinNbr.append(0)
+
+coin.sort(reverse=True)     # 큰 수부터 사용하기 위해 거꾸로 정렬
+
+nbr = K
+coinPos = 0
+while True:
+    if nbr == 0:
+        break
+    # 큰 수부터 빼준다. (실제로 일일이 빼준다면 시간초과 발생)
+    if nbr >= coin[coinPos]:
+        coinNbr[coinPos] += nbr // coin[coinPos]
+        nbr = nbr % coin[coinPos]
+    else:
+        coinPos += 1
+
+answer = 0
+for i in coinNbr:
+    answer += i
+
+print(answer)

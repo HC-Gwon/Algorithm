@@ -1,0 +1,43 @@
+# 방법 1
+import sys
+
+S = int(sys.stdin.readline())
+left = 1
+right = S
+answer = 0
+
+# n까지의 합이 n(n+1)/2 임을 사용하여 이분탐색
+while left <= right:
+    mid = (left + right) // 2
+    compNbr = mid * (mid + 1) / 2
+
+    if S > compNbr:
+       left = mid + 1
+       answer = mid
+    elif S == compNbr:
+        answer = mid
+        break
+    else:
+        right = mid - 1
+
+print(answer)
+
+
+# 방법 2
+# 수를 하나씩 더해가며 주어진 S보다 커지면 종료
+import sys
+
+ = int(sys.stdin.readline())
+tmp = 0
+answer = 1
+while True:
+    tmp += answer
+    if tmp > N:
+        answer -= 1
+        break
+    elif tmp == N:
+        break
+    else:
+        answer += 1
+
+print(answer)

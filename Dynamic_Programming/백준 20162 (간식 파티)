@@ -1,0 +1,18 @@
+import sys
+
+N = int(sys.stdin.readline())
+snack = []
+for i in range(N):
+    snack.append(int(sys.stdin.readline()))
+
+# 이중포문을 활용한 DP
+dp = [0 for i in range(N)]
+dp[0] = snack[0]
+for i in range(1, N):
+    for j in range(i):
+        if (snack[j] < snack[i]) and (dp[i] < dp[j]):
+            dp[i] = dp[j]
+
+    dp[i] = dp[i] + snack[i]
+
+print(max(dp))

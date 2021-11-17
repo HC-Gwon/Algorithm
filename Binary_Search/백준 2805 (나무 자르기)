@@ -1,0 +1,37 @@
+# pypy3 로 채점
+import sys
+from collections import Counter
+
+N, M = map(int, sys.stdin.readline().split())
+tree = list(map(int, sys.stdin.readline().split()))
+
+# 이분탐색을 사용하기 위해 tree 정렬
+tree.sort()
+tree_len = len(tree) - 1
+
+left = 0
+right = tree[tree_len]
+answer = 0
+
+# 절단기 높이의 최대가 될 값을 이분탐색으로 찾는다.
+while left <= right:
+    mid = int((left + right) / 2)
+
+    # 시간을 최대한 줄이기 위해서 절단기 높이보다 낮은 나무가 나오면 길이 합 종료
+    tmp = 0
+    for i in range(N-1, -1, -1):
+        if mid < tree[i]:
+            tmp += tree[i] - mid
+        else:
+            break
+
+    if tmp > M:
+        left = mid + 1
+        answer = mid        # 같아서 더 크게해줬더니 이상하게 더 갈수도 있기때문에
+    elif tmp < M:
+        right = mid - 1
+    else:
+        answer = mid
+        break
+
+print(answer)

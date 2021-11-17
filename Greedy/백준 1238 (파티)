@@ -1,0 +1,76 @@
+import sys
+import heapq
+
+INF = 2100000000
+
+N, M, X = map(int, sys.stdin.readline().split())
+
+graph = [[] for j in range(N+1)]
+for i in range(M):
+    u, v, w = map(int, sys.stdin.readline().split())
+    graph[u].append((v, w))     # 연결된 정점 / 가중치
+
+
+# X의 집에서 본인 집 가는데 걸리는 거리
+lengthTo = [INF for i in range(N+1)]
+lengthTo[X] = 0
+visitTo = [0 for i in range(N+1)]
+heapTo = [(0, X)]   # 최단거리 / 정점
+heapq.heapify(heapTo)
+
+while True:
+    # 종료조건
+    if len(heapTo) == 0:
+        break
+
+    dist, nowPos = heapq.heappop(heapTo)
+
+    if visitTo[nowPos] == 1:
+        continue
+    visitTo[nowPos] = 1
+
+    for j in graph[nowPos]:
+        if lengthTo[nowPos] + j[1] < lengthTo[j[0]]:
+            lengthTo[j[0]] = lengthTo[nowPos] + j[1]
+            heapq.heappush(heapTo, (lengthTo[j[0]], j[0]))
+
+
+# 각자의 집에서 X 집가는데 걸리는 거리
+lengthFrom = [INF for i in range(N+1)]
+
+for i in range(1, N+1):
+    if i == X:
+        continue
+
+    tmpLength = [INF for i in range(N+1)]
+    tmpLength[i] = 0
+    tmpVisit = [0 for i in range(N+1)]
+    tmpHeap = [(0, i)]
+    heapq.heapify(heapTo)
+
+    while True:
+        # 종료조건
+        if tmpVisit[X] == 1 or len(tmpHeap) == 0:
+            break
+
+        dist, nowPos = heapq.heappop(tmpHeap)
+
+        if tmpVisit[nowPos] == 1:
+            continue
+        tmpVisit[nowPos] = 1
+
+        for j in graph[nowPos]:
+            if tmpLength[nowPos] + j[1] < tmpLength[j[0]]:
+                tmpLength[j[0]] = tmpLength[nowPos] + j[1]
+                heapq.heappush(tmpHeap, (tmpLength[j[0]], j[0]))
+
+    lengthFrom[i] = tmpLength[X]
+
+
+max = 0
+for i in range(1, N+1):
+    if i != X:
+        if max < lengthTo[i] + lengthFrom[i]:
+            max = lengthTo[i] + lengthFrom[i]
+
+print(max)

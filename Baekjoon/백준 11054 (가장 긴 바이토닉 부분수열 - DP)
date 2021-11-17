@@ -1,0 +1,31 @@
+import sys
+
+N = int(sys.stdin.readline())
+arr = list(map(int, sys.stdin.readline().split()))
+dict = {}   # key : (증가, 감소)
+
+for i in range(N):
+    up, down = 0, 0
+    for key in dict.keys():
+        # 증가를 살펴본다.
+        if key < arr[i]:
+            if up < dict[key][0] + 1:
+                up = dict[key][0] + 1
+        # 감소를 살펴본다.
+        elif key > arr[i]:
+            if down < max(dict[key][0] + 1, dict[key][1] + 1):
+                down = max(dict[key][0] + 1, dict[key][1] + 1)
+
+    if up == 0:
+        up = 1
+    if down == 0:
+        down = 1
+
+    dict[arr[i]] = (up, down)
+
+answer = 0
+for key in dict.keys():
+    if answer < max(dict[key][0], dict[key][1]):
+        answer = max(dict[key][0], dict[key][1])
+
+print(answer)

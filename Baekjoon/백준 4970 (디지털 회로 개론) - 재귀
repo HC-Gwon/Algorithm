@@ -1,0 +1,81 @@
+import sys
+
+
+def oper(x, y, operation):
+    if operation == '+':
+        if x == y == 0:
+            return 0
+        elif (x == 2) or (y == 2):
+            return 2
+        else:
+            return 1
+    elif operation == '*':
+        if (x == 0) or (y == 0):
+            return 0
+        elif x == y == 2:
+            return 2
+        else:
+            return 1
+
+
+def minus_calc(nbr, minus):
+    if minus % 2 == 0:
+        return nbr
+    else:
+        return 2 - nbr
+
+
+def calc(P, Q, R, input, pos):
+    x, y, operation = -1, -1, ''
+    minus_count = 0
+    nbr_dict = {'P':P, 'Q':Q, 'R':R, '0':0, '1':1, '2':2}
+    answer = 0
+
+    while pos < len(input):
+        if input[pos] == '(':
+            if operation == '':
+                x, pos = calc(P, Q, R, input, pos+1)
+                x = minus_calc(x, minus_count)
+            else:
+                y, pos = calc(P, Q, R, input, pos+1)
+                y = minus_calc(y, minus_count)
+            minus_count = 0
+        elif input[pos] == '-':
+            minus_count += 1
+        elif (input[pos] == 'P') or (input[pos] == 'Q') or (input[pos] == 'R') or (input[pos] == '0') or (input[pos] == '1') or (input[pos] == '2'):
+            if operation == '':
+                x = nbr_dict[input[pos]]
+                x = minus_calc(x, minus_count)
+            else:
+                y = nbr_dict[input[pos]]
+                y = minus_calc(y, minus_count)
+            minus_count = 0
+        elif (input[pos] == '*') or (input[pos] == '+'):
+            operation = input[pos]
+        elif input[pos] == ')':
+            return oper(x, y, operation), pos
+        pos += 1
+
+    if operation == '':
+        answer = x
+    else:
+        answer = oper(x, y, operation)
+
+    return answer
+
+
+input = sys.stdin.readline()
+while input != '.':
+    answer = 0
+    calc_result = 0
+
+    for P in range(3):
+        for Q in range(3):
+            for R in range(3):
+                calc_result = calc(P, Q, R, input, 0)
+                if calc_result == 2:
+                    answer += 1
+
+    print(answer)
+
+    input = sys.stdin.readline().rstrip()

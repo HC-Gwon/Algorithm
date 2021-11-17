@@ -1,0 +1,24 @@
+import sys
+
+# 서류심사 성적 1등의 면접성적보다 낮으면 채용 불가능
+T = int(sys.stdin.readline())
+for i in range(T):
+    N = int(sys.stdin.readline())
+    arr = []
+    for j in range(N):
+        x, y = map(int, sys.stdin.readline().split())
+        arr.append((x, y))
+
+    arr.sort()
+
+    answer = N
+    minPos = 0
+    # 정렬된 상태에서 첫번째 직원의 면접점수보다 낮다면 탈락 높다면 통과
+    # 높은 경우, 해당 직원을 기준으로 뒤의 직원들과 비교해 서류심사 점수는 높기 때문에 면접 점수를 비교 
+    for j in range(1, N):
+        if arr[minPos][1] < arr[j][1]:
+            answer -= 1
+        else:
+            minPos = j
+
+    print(answer)

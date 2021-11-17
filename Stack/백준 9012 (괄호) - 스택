@@ -1,0 +1,27 @@
+import sys
+
+
+# ( 가 나오는 경우 arr에 값을 하나 추가해두고
+# ) 가 나오는 경우 arr에서 값을 하나씩 빼서 쌍을 이루기
+# ( 가 없을 때 ) 가 들어가면 틀린 것
+nbr = int(sys.stdin.readline().rstrip())    # 주어지는 명령의 수
+arr = []
+for i in range(nbr):
+    str = sys.stdin.readline().rstrip()
+
+    for j in range(len(str)):
+        if str[j] == '(':           # ( 가 들어오는 경우 arr에 표시
+            arr.append(0)
+        elif str[j] == ')':         # ) 가 들어오는 경우
+            if len(arr) == 0:       # 빈 arr면 오류
+                arr.append(0)
+                break
+            else:                   # 값이 들어있는 경우 하나 제거
+                del(arr[0])
+
+    if len(arr) == 0:               # ( 와 ) 쌍이 맞아서 비어있는 경우
+        print("YES")
+    else:
+        print("NO")
+        for j in range(len(arr)):
+            del(arr[0])

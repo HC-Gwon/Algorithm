@@ -1,0 +1,27 @@
+import sys
+
+N = int(sys.stdin.readline())
+arr = list(map(int, sys.stdin.readline().split(' ')))
+stack = [0]
+answer = [-1 for i in range(N)]
+
+# 본인보다 큰 값이 나오면 그 값을 answer에 넣고
+# 아닌 경우 stack에 넣고 큰 값이 나올 때까지 기다리는 방식
+for i in range(1, N):
+    if arr[i] < arr[stack[-1]]:
+        stack.append(i)
+    else:
+        while True:
+            if len(stack) == 0:
+                stack.append(i)
+                break
+            else:
+                if arr[i] > arr[stack[-1]]:
+                    answer[stack[-1]] = arr[i]
+                    stack.pop()
+                else:
+                    stack.append(i)
+                    break
+
+for i in range(N):
+    print(answer[i], end=" ")

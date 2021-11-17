@@ -1,0 +1,65 @@
+import sys
+
+N = int(sys.stdin.readline())
+arr = list(map(int, sys.stdin.readline().split()))
+op = list(map(int, sys.stdin.readline().split()))
+answer = [-1000000000, 1000000000]     # 최대 / 최소
+
+
+def operation(pos, nbr):
+    # 종료조건
+    if pos == N-1:
+        if answer[0] < nbr:
+            answer[0] = nbr
+        if answer[1] > nbr:
+            answer[1] = nbr
+        return
+
+    for i in range(4):
+        if i == 0 and op[0] > 0:
+            nbr += arr[pos+1]
+            op[0] -= 1
+
+            operation(pos + 1, nbr)
+
+            nbr -= arr[pos+1]
+            op[0] += 1
+        elif i == 1 and op[1] > 0:
+            nbr -= arr[pos+1]
+            op[1] -= 1
+
+            operation(pos + 1, nbr)
+
+            nbr += arr[pos + 1]
+            op[1] += 1
+        elif i == 2 and op[2] > 0:
+            nbr *= arr[pos+1]
+            op[2] -= 1
+
+            operation(pos + 1, nbr)
+
+            nbr //= arr[pos+1]
+            op[2] += 1
+        elif i == 3 and op[3] > 0:
+            check = 0
+            if nbr < 0:
+                check = 1
+                nbr *= -1
+
+            nbr //= abs(arr[pos+1])
+            op[3] -= 1
+
+            if check == 1:
+                nbr *= -1
+
+            operation(pos + 1, nbr)
+
+            nbr *= arr[pos+1]
+            op[3] += 1
+
+    return
+
+
+operation(0, arr[0])
+print(answer[0])
+print(answer[1])

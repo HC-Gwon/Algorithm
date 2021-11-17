@@ -1,0 +1,15 @@
+import sys
+
+N = int(sys.stdin.readline())                           # 좌표의 개수
+arr = list(map(int, sys.stdin.readline().split()))      # 좌표를 list 형태로 받기
+
+uniqueArr = list(set(arr))                              # arr의 값을 unique한 값들로만 뽑기 / 정렬해야하므로 set -> list
+compressArr = [i for i in range(len(uniqueArr))]        # 각 원소의 크기 순서대로 대응할 0부터 순차 값
+
+uniqueArr.sort()
+dictArr = dict(zip(uniqueArr, compressArr))             # dict로 변경하여 각 값에 대응하기 
+
+for i in range(N):                                      # 문제에서 주어진 배열에 순서대로 값 대응
+    print(dictArr[arr[i]], end=' ')
+
+

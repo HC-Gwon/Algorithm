@@ -1,0 +1,14 @@
+import sys
+
+N = int(sys.stdin.readline())
+dp0 = [0]       # 끝이 0인 수
+dp1 = [1]       # 끝이 1인 수
+
+# 11은 존재할 수 없기 때문에
+# 끝을 0으로 끝내면 그 전이 0 / 1 상관없음
+# 끝을 1로 끝내면 그 전이 반드시 0
+for i in range(1, N):
+    dp0.append(dp0[i-1] + dp1[i-1])
+    dp1.append(dp0[i-1])
+
+print(dp0[N-1] + dp1[N-1])

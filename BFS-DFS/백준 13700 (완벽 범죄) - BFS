@@ -1,0 +1,32 @@
+import sys
+from collections import deque
+
+N, S, D, F, B, K = map(int, sys.stdin.readline().split())
+police = list(map(int, sys.stdin.readline().split()))
+police_pos = [0 for i in range(N+1)]
+for pos in police:
+    police_pos[pos] = 1
+
+move_queue = deque()
+move_queue.append(S)
+move_count = [-1 for _ in range(N+1)]
+move_count[S] = 0
+
+while len(move_queue) > 0:
+    pos = move_queue.popleft()
+
+    if pos == D:
+        break
+
+    if pos + F <= N and police_pos[pos + F] == 0 and move_count[pos+F] == -1:
+        move_queue.append(pos+F)
+        move_count[pos+F] = move_count[pos] + 1
+
+    if pos - B >= 1 and police_pos[pos - B] == 0 and move_count[pos-B] == -1:
+        move_queue.append(pos-B)
+        move_count[pos-B] = move_count[pos] + 1
+
+if move_count[D] == -1:
+    print('BUG FOUND')
+else:
+    print(move_count[pos])

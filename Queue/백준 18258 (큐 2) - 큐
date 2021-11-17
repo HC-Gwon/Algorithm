@@ -1,0 +1,65 @@
+# 맨 앞을 빼는 것에서 O(N)의 시간이 걸리므로
+# 일반 stack구조에서 st, end를 통해 맨 앞과 맨 뒤를
+# 확인하여 queue의 형태로 동작하게 함
+import sys
+
+
+def pushX(queue, x):
+    queue.append(x)
+    return
+
+
+def popX(queue):
+    if (end - st) > 0:
+        return queue[st], st+1, end
+    else:
+        return -1, st, end
+
+
+def IsEmpty(queue, st, end):
+    if (end - st) == 0:
+        return 1
+    else:
+        return 0
+
+
+def frontX(queue, st, end):
+    if (end - st) > 0:
+        return queue[st]
+    else:
+        return -1
+
+
+def backX(queue, st, end):
+    if (end - st) > 0:
+        return queue[end-1]
+    else:
+        return -1
+
+
+nbr = int(sys.stdin.readline())    # 주어지는 명령의 수
+queue = []
+st, end = 0, 0
+for i in range(nbr):
+    str = sys.stdin.readline().rstrip()
+
+    if len(str) == 3:       # pop
+        tmp, st, end = popX(queue)
+        print(tmp)
+
+    elif len(str) == 4:     # size / back
+        if str[0] == 's':
+            print(end-st)
+        elif str[0] == 'b':
+            print(backX(queue, st, end))
+
+    elif len(str) == 5:     # empty / front
+        if str[0] == 'e':
+            print(IsEmpty(queue, st, end))
+        elif str[0] == 'f':
+            print(frontX(queue, st, end))
+
+    elif len(str) >= 6:     # push X
+        X = int(str[5:])
+        pushX(queue, X)
+        end += 1

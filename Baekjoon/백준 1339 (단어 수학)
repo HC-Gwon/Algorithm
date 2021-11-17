@@ -1,0 +1,42 @@
+import sys
+
+N = int(sys.stdin.readline())
+wordList = []
+for i in range(N):
+    tmp = sys.stdin.readline().rstrip('\n')
+    wordList.append(tmp)
+
+# 길이가 긴 것부터 정렬
+wordList.sort(key=lambda x: len(x), reverse=True)
+alpa = [0 for i in range(26)]        # 알파벳 26개 중 임의로 10개가 나온다.
+alpaPos = {}                         # 사용된 알파벳에 대한 정보
+
+# 각 알파벳의 위치 (ex. 일의 자리, 십의 자리)에 대해서 값을 더해줘서 크기를 나열
+for i in range(N):
+    for j in range(len(wordList[i])):
+        if alpa[ord(wordList[i][j])-65] == 0:
+            alpa[ord(wordList[i][j])-65] = 1
+            alpaPos[wordList[i][j]] = 10 ** (len(wordList[i]) - j)
+        else:
+            alpaPos[wordList[i][j]] += 10 ** (len(wordList[i]) - j)
+
+alpaPos = sorted(alpaPos.items(), key=lambda x: x[1], reverse=True)
+
+# 위에서 구한 값 크기대로 9부터 차례대로 대입
+nbr = 9
+alpaNbr = [0 for i in range(26)]
+for i in alpaPos:
+    if alpaNbr[ord(i[0])-65] == 0:
+        alpaNbr[ord(i[0])-65] = nbr
+        nbr -= 1
+
+# 주어진 값에 대해서 각 알파벳 숫자에 대해 값을 부여
+answer = 0
+for i in range(N):
+    nbr = ''
+    for j in range(len(wordList[i])):
+        nbr = nbr + str(alpaNbr[ord(wordList[i][j])-65])
+
+    answer += int(nbr)
+
+print(answer)

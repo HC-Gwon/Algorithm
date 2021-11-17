@@ -1,0 +1,44 @@
+import sys
+import math
+
+T = int(sys.stdin.readline())
+for i in range(T):
+    x1, y1, r1, x2, y2, r2 = map(int, sys.stdin.readline().split())
+    bigX, bigY, bigR, smallX, smallY, smallR = 0, 0, 0, 0, 0, 0
+    if r1 > r2:
+        bigX, bigY, bigR = x1, y1, r1
+        smallX, smallY, smallR = x2, y2, r2
+    else:
+        bigX, bigY, bigR = x2, y2, r2
+        smallX, smallY, smallR = x1, y1, r1
+
+    dist = math.sqrt((bigX-smallX)**2 + (bigY-smallY)**2)        # 두 원점 사이의 거리
+
+    # 두 원이 같은 경우
+    if dist == 0 and r1 == r2:
+        print(-1)
+
+    # 작은 원이 큰 원의 내부에 존재할 때
+    elif dist < bigR:
+        # 완전히 포함되어 한 점도 만나지 않을 때
+        if (dist + smallR) < bigR:
+            print(0)
+        # 한 점에서 만날 때
+        elif (dist + smallR) == bigR:
+            print(1)
+        # 두 점에서 만날 때
+        else:
+            print(2)
+
+    # 작은 원이 큰 원의 둘레에 존재할 때
+    elif dist == bigR:
+        print(2)
+
+    # 작은 원이 큰 원의 외부에 존재할 때
+    else:
+        if dist < (bigR + smallR):
+            print(2)
+        elif dist == (bigR + smallR):
+            print(1)
+        else:
+            print(0)

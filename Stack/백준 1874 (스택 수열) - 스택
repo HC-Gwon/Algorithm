@@ -1,0 +1,44 @@
+# list에서 del, remove 등의 함수는 주어진 list를 한번 다 확인하기 때문에 O(N)의 시간이 들게된다.
+import sys
+
+
+# 입력으로 주어진 수열을 1부터 값을
+# 스택에 넣고 빼는 과정으로 만들 수 있는지 확인하는 문제
+stack = [0]
+printOp = []                                # 수행하는 연산을 나타냄
+top = 0
+maxNbr = 0
+check = 0
+
+n = int(sys.stdin.readline().rstrip())      # n개의 수가 주어진다
+for i in range(n):
+    stack.append(0)
+for i in range(n):
+    nbr = int(sys.stdin.readline().rstrip())
+
+    # 주어진 수가 스택안에 없을 경우
+    if stack[top] < nbr:
+        for j in range(maxNbr+1, nbr):
+            top += 1
+            stack[top] = j
+            printOp.append("+")
+        # 주어진 수에 도달했으므로 넣었다가 뺀다
+        printOp.append("+")
+        printOp.append("-")
+        maxNbr = nbr
+
+    # 주어진 수가 스택 top의 값일 때
+    elif stack[top] == nbr:
+        printOp.append("-")
+        stack[top] = 0
+        top -= 1
+
+    # 주어진 수가 스택 내부에 있을 때
+    elif stack[top] > nbr:
+        check = 1
+        print("NO")
+        break
+
+if check == 0:
+    for i in range(len(printOp)):
+        print(printOp[i])

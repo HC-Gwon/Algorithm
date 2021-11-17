@@ -1,0 +1,22 @@
+import sys
+
+N = int(sys.stdin.readline())
+roadLen = list(map(int, sys.stdin.readline().split()))
+price = list(map(int, sys.stdin.readline().split()))
+
+pos, pricePos = 1, 0
+answer = 0
+while pos < N:
+    if price[pos] < price[pricePos]:
+        for i in range(pricePos, pos):
+            answer += roadLen[i] * price[pricePos]
+
+        pricePos = pos
+        pos += 1
+    else:
+        pos += 1
+
+for i in range(pricePos, pos-1):
+    answer += roadLen[i] * price[pricePos]
+
+print(answer)

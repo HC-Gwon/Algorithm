@@ -1,0 +1,34 @@
+import sys
+import heapq
+
+INF = 2100000000
+
+N = int(sys.stdin.readline())
+maze = [[0 for j in range(N)] for i in range(N)]
+for i in range(N):
+    str = sys.stdin.readline()
+    for j in range(N):
+        maze[i][j] = (1-int(str[j]))                # 흰방 0 / 검은방 1
+
+tmp = [[INF for j in range(N)] for i in range(N)]   # 미로의 위치에 따른 최단거리
+tmp[0][0] = 0
+heap = [(0, 0, 0)]      # 최단 거리, x, y
+heapq.heapify(heap)
+
+dirX = [0, 0, -1, 1]    # 상하좌우
+dirY = [-1, 1, 0, 0]
+while True:
+    length, x, y = heapq.heappop(heap)
+
+    if x == N-1 and y == N-1:
+        break
+
+    for i in range(4):
+        X = x + dirX[i]
+        Y = y + dirY[i]
+        if 0 <= X < N and 0 <= Y < N:
+            if length + maze[Y][X] < tmp[Y][X]:
+                tmp[Y][X] = length + maze[Y][X]
+                heapq.heappush(heap, (tmp[Y][X], X, Y))
+
+print(tmp[N-1][N-1])

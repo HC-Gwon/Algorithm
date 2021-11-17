@@ -1,0 +1,58 @@
+import sys
+
+
+# 가장 좌측이 top / 가장 우측이 bottom
+def pushX(stack, x):
+    stack.insert(0, x)
+
+
+def popX(stack):
+    if len(stack) == 0:
+        return -1
+    else:
+        x = stack[0]
+        del(stack[0])
+        return x
+
+
+def sizeStack(stack):
+    return len(stack)
+
+
+def IsEmpty(stack):
+    if len(stack) == 0:
+        return 1
+    else:
+        return 0
+
+
+def topX(stack):
+    if len(stack) == 0:
+        return -1
+    else:
+        return stack[0]
+
+
+# 빠르게 입력받기 위해 sys.stdin.readline().rstrip() 사용
+# rstrip() 으로 공백을 제거하고 모두 읽어서 다음 줄 읽는데 영향 X
+nbr = int(sys.stdin.readline().rstrip())    # 주어지는 명령의 수
+arr = []
+for i in range(nbr):
+    str = sys.stdin.readline().rstrip()
+
+    if len(str) == 3:       # pop / top
+        if str[0] == 'p':   # pop인 경우
+            print(popX(arr))
+        elif str[0] == 't': # top인 경우
+            print(topX(arr))
+
+    elif len(str) == 4:     # size
+        print(sizeStack(arr))
+
+    elif len(str) == 5:     # empty
+        print(IsEmpty(arr))
+
+    elif len(str) >= 6:     # push X
+        X = int(str[5:])
+        pushX(arr, X)
+

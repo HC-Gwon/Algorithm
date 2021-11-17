@@ -1,0 +1,40 @@
+import sys
+import heapq
+
+INF = 2100000000
+
+N = int(sys.stdin.readline())
+M = int(sys.stdin.readline())
+
+graph = [[] for j in range(N+1)]
+for i in range(M):
+    u, v, w = map(int, sys.stdin.readline().split())
+    graph[u].append((v, w))     # 연결된 정점 / 가중치
+
+st, des = map(int, sys.stdin.readline().split())
+
+
+length = [INF for i in range(N+1)]
+length[st] = 0
+visit = [0 for i in range(N+1)]
+heap = [(0, st)]   # 최단거리 / 정점
+heapq.heapify(heap)
+
+while True:
+    # 종료조건
+    if visit[des] == 1 or len(heap) == 0:
+        break
+
+    dist, nowPos = heapq.heappop(heap)
+
+    if visit[nowPos] == 1:
+        continue
+    visit[nowPos] = 1
+
+    for j in graph[nowPos]:
+        if length[nowPos] + j[1] < length[j[0]]:
+            length[j[0]] = length[nowPos] + j[1]
+            heapq.heappush(heap, (length[j[0]], j[0]))
+
+
+print(length[des])

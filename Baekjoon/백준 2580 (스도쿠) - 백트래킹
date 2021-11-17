@@ -1,0 +1,79 @@
+Sudoku = [list(map(int, input().split())) for i in range(9)]    # 주어진 스도쿠 저장 배열
+zeroPlace = [(i, j) for i in range(9) for j in range(9) if Sudoku[i][j] == 0]  # 0의 위치
+check(0)
+
+import sys
+
+sys.setrecursionlimit(10000)    # 재귀 제한 깊이 변경
+
+Sudoku = []                     # 주어진 스도쿠 저장 배열
+for i in range(9):
+    Sudoku.append(list(map(int, sys.stdin.readline().split())))
+fin = 0
+zeroPlace = []                  # 0의 위치
+for i in range(9):
+    for j in range(9):
+        if Sudoku[i][j] == 0:
+            zeroPlace.append((i, j))
+
+
+# 해당 위치의 정사각형에 같은 숫자가 있는지 확인
+def checkSquare(x, y, k):
+    row = x - (x%3)
+    col = y - (y%3)
+
+    for i in range(row, row+3):
+        for j in range(col, col+3):
+            if Sudoku[i][j] == k:
+                return 1
+
+    return 0
+
+
+# 해당 위치의 가로/세로에 같은 숫자가 있는지 확인
+def checkLine(x, y, k):
+    for i in range(9):      # 가로 줄 확인
+        if Sudoku[x][i] == k:
+            return 1
+
+    for i in range(9):      # 세로 줄 확인인
+        if Sudoku[i][y] == k:
+            return 1
+
+    return 0
+
+
+def check(pos):
+    global fin
+    # 종료조건 - 모든 칸을 채운 경우
+    if fin == 1:
+        return
+    elif pos == len(zeroPlace):
+        fin = 1
+
+        for i in range(9):
+            for j in range(9):
+                print(Sudoku[i][j], end=" ")
+            print()
+
+        sys.exit(0)
+        return
+    else:
+        x, y = zeroPlace[pos][0], zeroPlace[pos][1]
+        for k in range(1, 10):
+            checkNbr = 0
+            # checkSqure가 맨 앞에 오면 시간초과 발생 / 검사 순서도 
+            checkNbr += checkLine(x, y, k)
+            if checkNbr == 0:
+                checkNbr += checkSquare(x, y, k)
+                if checkNbr == 0:
+                    Sudoku[x][y] = k
+                    check(pos+1)
+                    Sudoku[x][y] = 0
+
+            if fin == 1:
+                break
+
+
+check(0)
+

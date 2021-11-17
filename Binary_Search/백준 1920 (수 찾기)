@@ -1,0 +1,51 @@
+# 방법 1 - 일반적인 binary_search 구현
+import sys
+
+
+def binary_search(arr, target):
+    left = 0
+    right = len(arr) - 1
+    check = 0
+
+    # 목표 값과 비교하면서 범위를 반씩 줄인다.
+    while left <= right:
+        mid = int((left + right) / 2)
+        if target > arr[mid]:
+            left = mid + 1
+        elif target < arr[mid]:
+            right = mid - 1
+        else:
+            check = 1
+            break
+
+    print(check)
+
+
+N = int(sys.stdin.readline())
+nbr = list(map(int, sys.stdin.readline().split()))
+M = int(sys.stdin.readline())
+find = list(map(int, sys.stdin.readline().split()))
+
+# 이분탐색을 위하여 nbr를 정렬
+nbr.sort()
+
+for i in range(M):
+    binary_search(nbr, find[i])
+
+
+
+# 방법 2 - 파이썬의 set을 사용하여 O(1)로 찾아서 하는 방식
+import sys
+
+N = int(sys.stdin.readline())
+nbr = set(map(int, sys.stdin.readline().split()))
+M = int(sys.stdin.readline())
+find = list(map(int, sys.stdin.readline().split()))
+
+for i in find:
+    # set은 찾는데 O(1) / list는 찾는데 O(N)
+    # -> nbr을 list로 바꾸면 
+    if i in nbr:
+        print(1)
+    else:
+        print(0)

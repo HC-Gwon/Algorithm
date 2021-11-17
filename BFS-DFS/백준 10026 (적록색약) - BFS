@@ -1,0 +1,49 @@
+import sys
+from collections import deque
+
+N = int(sys.stdin.readline())
+
+arr, arr_RG = [], []
+for i in range(N):
+    tmp = sys.stdin.readline().rstrip()
+    arr.append([])
+    arr_RG.append([])
+    for char in tmp:
+        arr[i].append(char)
+        if char == 'G':
+            arr_RG[i].append('R')
+        else:
+            arr_RG[i].append(char)
+
+dirX = [0, 0, -1, 1]       # 상하좌우
+dirY = [-1, 1, 0, 0]
+
+
+def BFS(i, j, MAP):
+    Q = deque([[i, j]])
+    color = MAP[i][j]
+
+
+    while len(Q) != 0:
+        x, y = Q.popleft()
+        for i in range(4):
+            X = x + dirY[i]
+            Y = y + dirX[i]
+            if 0 <= X < N and 0 <= Y < N:
+                if MAP[X][Y] == color:
+                    Q.append([X, Y])
+                    MAP[X][Y] = -1
+
+
+answer, answer_RG = 0, 0
+for i in range(N):
+    for j in range(N):
+        if arr[i][j] != -1:
+            BFS(i, j, arr)
+            answer += 1
+
+        if arr_RG[i][j] != -1:
+            BFS(i, j, arr_RG)
+            answer_RG += 1
+
+print(answer, answer_RG)

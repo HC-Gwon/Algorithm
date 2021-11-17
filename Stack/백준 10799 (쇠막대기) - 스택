@@ -1,0 +1,38 @@
+input = input()
+tmp = []                  # 쇠막대 정보 임시로 담을 stack
+top = 0                   # tmp stack의 맨 윗 번호
+stealStick = {}           # dictionary에 쇠막대
+raser = []                # 레이저 정보 담을 배열
+dictNbr = 0               # dictionary 번호
+stickNbr = 0              # input에서 i번째 배열의 원소로 갔을 때
+                          # 계속 이어져가는 쇠막대의 수
+answer = 0
+
+# tmp를 주어진 입력 길이만큼 생성
+for i in range(len(input)):
+	tmp.append(-1)
+
+# 주어진 입력에 대해 동작 수행
+for i in range(len(input)):
+	# ( 가 입력되었을 때 막대의 시작 ( '('와 연결)
+	# 또는 레이저를 나타냄 ( ')'와 연결)
+	if input[i] == '(':           # 막대가 이어지는데 레이저가 나오면 막대가 나뉘어짐
+		if input[i+1] == ')':
+			raser.append(i)
+			answer += stickNbr
+		elif input[i+1] == '(':     # 새로운 막대가 추가
+			answer += 1
+			stickNbr += 1
+			tmp[top] = i
+			top += 1
+	# ) 가 입력되었을 때 막대의 종료 ( 앞에 ')')
+	# 또는 레이저의 종료를 나타냄 ( 앞에 '(')
+	elif input[i] == ')':
+		if input[i-1] == ')':
+			stealStick[dictNbr] = (tmp[top-1], i)
+			stickNbr -= 1
+			dictNbr += 1
+			tmp[top-1] = -1
+			top -= 1
+
+print(answer)

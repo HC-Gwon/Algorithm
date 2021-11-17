@@ -1,0 +1,25 @@
+import sys
+
+# -50 ~ 50을 0에서 100에 대응
+W = [[[0 for i in range(101)] for j in range(101)] for k in range(101)]
+for i in range(101):
+    for j in range(101):
+        for k in range(101):
+            if i <= 50 or j <= 50 or k <= 50:
+                W[i][j][k] = 1
+            # 이 부분을 실제 값을 넣지 않고 돌리면 W[70][70][70] 값이 아직 정의되지 않아 0으로 나온다.
+            # 문제의 예제에서 해당 값에 대한 정보를 준다.
+            elif i > 70 or j > 70 or k > 70:
+                W[i][j][k] = 1048576
+            elif i < j < k:
+                W[i][j][k] = W[i][j][k-1] + W[i][j-1][k-1] - W[i][j-1][k]
+            else:
+                W[i][j][k] = W[i-1][j][k] + W[i-1][j-1][k] + W[i-1][j][k-1] - W[i-1][j-1][k-1]
+
+while True:
+    a, b, c = map(int, sys.stdin.readline().split())
+    # 종료
+    if a == -1 and b == -1 and c == -1:
+        break
+
+    print("w(%d, %d, %d) = %d" % (a, b, c, W[a+50][b+50][c+50]))

@@ -1,0 +1,20 @@
+# heapq 를 사용한 풀이
+# 기본이 최소힙
+
+import sys
+import heapq
+
+
+N = int(sys.stdin.readline().rstrip())
+maxHeap = []
+for i in range(N):
+    x = int(sys.stdin.readline().rstrip())
+    if x == 0:
+        if len(maxHeap) == 0:
+            print(0)
+        else:
+            print(-maxHeap[0])
+            heapq.heappop(maxHeap)
+    else:
+        # - 를 붙이므로 최대힙처럼 사용 가능
+        heapq.heappush(maxHeap, -x)

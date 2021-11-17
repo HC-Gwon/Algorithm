@@ -1,0 +1,16 @@
+import sys
+
+N = int(sys.stdin.readline().rstrip())
+card = {}
+front = 1
+rear = N
+for i in range(1, N+1):
+    card[i] = i+1
+
+# 현 상태에서 맨 위의 것은 삭제, 그 다음 것은 맨 뒤로 보내기
+for i in range(N-1):
+    card[rear] = card[front]        # 그 다음 것을 맨 뒤로
+    rear = card[front]
+    front = card[card[front]]       # 맨 위의 것은 삭제
+
+print(front)

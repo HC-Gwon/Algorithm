@@ -1,0 +1,30 @@
+# 그리디 알고리즘
+import sys
+
+
+def plus_minus(sign, nbr):
+    if sign == 0:
+        return nbr
+    else:
+        return -nbr
+
+string = str(sys.stdin.readline().rstrip('\n'))     # 개행문자('\n')를 없애기 위해 rstrip('\n') 
+
+answer = 0
+sign = 0        # 0 + / 1 -
+nbr = ''
+# '-'가 나오고 나서부턴 다음 -까지 모두 괄호로 묶어 음수를 만들어 뺀다.
+# 그 전엔 계속 더하기 수행
+for i in string:
+    if i == '-':
+        answer += plus_minus(sign, int(nbr))
+        nbr = ''      # nbr 초기화 / 안해주면 부호 앞까지의 수가 안나옴
+        sign = 1
+    elif i == '+':
+        answer += plus_minus(sign, int(nbr))
+        nbr = ''      # nbr 초기화 / 안해주면 부호 앞까지의 수가 안나옴
+    elif 0 <= int(i) <= 9:
+        nbr += i
+answer += plus_minus(sign, int(nbr))    # 마지막 숫자에는 부호가 없어서 더하거나 뺄 수 없어서 따로 해준다.
+
+print(answer)

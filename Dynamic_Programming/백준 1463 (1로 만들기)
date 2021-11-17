@@ -1,0 +1,19 @@
+import sys
+
+N = int(sys.stdin.readline())
+dp = [0, 0]        # 1은 1로 만들기 위해 연산을 0번 수행
+
+# 각 수는 3으로 나눠지거나 2로 나눠지는 경우 i/3, i/2 번째의 연산 + 1이 최적이므로
+# 해당 경우가 발생하는 경우 i-1번째의 연산과 비교하여 가장 빠른 연산에서 +1 하는 것으로 
+for i in range(2, N+1):
+    x, y, z = N, N, N
+
+    if i % 3 == 0:
+        x = dp[int(i/3)]
+    if i % 2 == 0:
+        y = dp[int(i/2)]
+    z = dp[i-1]
+
+    dp.append(min(x, y, z) + 1)
+
+print(dp[N])

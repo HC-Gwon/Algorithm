@@ -1,0 +1,36 @@
+# 가장 작은 숫자 2개를 찾는다. ([0] + 삭제 후 [0])
+# 그 두개를 더하고 힙에 다시 추가 후 반복
+
+import sys
+import heapq
+
+
+N = int(sys.stdin.readline().rstrip())
+minHeap = []
+length = 0
+
+# 1개만 주어지면 비교할 대상이 없기 때문에 0
+if N == 1:
+    print(0)
+else:
+    for i in range(N):
+        x = int(sys.stdin.readline().rstrip())
+        heapq.heappush(minHeap, x)
+        length += 1
+
+    answer = 0
+    while True:
+        first = minHeap[0]
+        heapq.heappop(minHeap)
+        second = minHeap[0]
+        heapq.heappop(minHeap)
+        # 가장 작은 것 2개를 비교하였으므로 새로 생긴 묶음을 
+        heapq.heappush(minHeap, first + second)
+
+        answer += first + second
+
+        # 힙에 하나밖에 없을 경우 더 이상 비교할 것이 없으므로 종료
+        if len(minHeap) == 1:
+            break
+
+    print(answer)

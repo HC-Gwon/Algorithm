@@ -1,0 +1,22 @@
+import sys
+
+N = int(sys.stdin.readline())
+leftNbr = list(map(int, sys.stdin.readline().split()))
+
+# k번째라고 하면 남은 자리 중 k번째 위치
+# 3번이 자기 왼쪽이 1명이면 1번, 2번을 제외한 것이고
+# 1번부터 차례대로 자리를 마킹하기 때문에 남은 자리 중 1번째 자리가 3번의 자리
+pos = [0 for i in range(N)]
+for i in range(N):
+    count = leftNbr[i]
+    for j in range(N):
+        if pos[j] == 0:
+            if count == 0:
+                pos[j] = i+1
+                break
+            else:
+                count -= 1
+
+for i in range(N):
+    print(pos[i], end=" ")
+    

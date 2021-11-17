@@ -1,0 +1,67 @@
+import sys
+
+
+# 가장 좌측이 rear / 가장 우측이 front
+def pushX(queue, x):
+    queue.insert(0, x)
+
+
+def popX(queue):
+    if len(queue) == 0:
+        return -1
+    else:
+        length = len(queue)-1
+        x = queue[length]
+        del(queue[length])
+        return x
+
+
+def sizeStack(queue):
+    return len(queue)
+
+
+def IsEmpty(queue):
+    if len(queue) == 0:
+        return 1
+    else:
+        return 0
+
+
+def frontX(queue):
+    if len(queue) == 0:
+        return -1
+    else:
+        return queue[len(queue)-1]
+
+
+def backX(queue):
+    if len(queue) == 0:
+        return -1
+    else:
+        return queue[0]
+
+
+
+nbr = int(sys.stdin.readline().rstrip())    # 주어지는 명령의 수
+queue = []
+for i in range(nbr):
+    str = sys.stdin.readline().rstrip()
+
+    if len(str) == 3:       # pop
+        print(popX(queue))
+
+    elif len(str) == 4:     # size / back
+        if str[0] == 's':
+            print(sizeStack(queue))
+        elif str[0] == 'b':
+            print(backX(queue))
+
+    elif len(str) == 5:     # empty / front
+        if str[0] == 'e':
+            print(IsEmpty(queue))
+        elif str[0] == 'f':
+            print(frontX(queue))
+
+    elif len(str) >= 6:     # push X
+        X = int(str[5:])
+        pushX(queue, X)

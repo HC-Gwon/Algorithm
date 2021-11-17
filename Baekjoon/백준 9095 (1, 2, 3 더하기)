@@ -1,0 +1,17 @@
+import sys
+
+N = int(sys.stdin.readline())
+dp = [0, 1, 2, 4]        # 1, 2, 3 일때 경우의 수들
+
+for i in range(N):
+    n = int(sys.stdin.readline())
+
+    length = len(dp)
+    for j in range(length, n+1):
+        one = dp[j-3]           # n-3을 만드는 경우의 수에 +3을 각각 해준다.
+        two = dp[j-2]           # n-2을 만드는 경우의 수에 +2을 각각 해준다.
+        three = dp[j-1]         # n-1을 만드는 경우의 수에 +1을 각각 해준다.
+
+        dp.append(one+two+three)
+
+    print(dp[n])
